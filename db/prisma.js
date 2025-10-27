@@ -1,5 +1,6 @@
-
-import { PrismaClient } from "@prisma/client";
+// Use default import since @prisma/client is CommonJS
+import pkg from "@prisma/client";
+const { PrismaClient } = pkg;
 
 const prisma = new PrismaClient();
 
