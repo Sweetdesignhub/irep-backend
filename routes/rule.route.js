@@ -48,7 +48,9 @@ import {
   transformTableData,
 } from "../controllers/database.controller.js";
 import multer from "multer";
-import { PrismaClient } from "@prisma/client"; // Make sure you have @prisma/client installed
+import pkg from "@prisma/client";
+const { PrismaClient } = pkg;
+// Make sure you have @prisma/client installed
 
 const router = Router();
 const prisma = new PrismaClient();

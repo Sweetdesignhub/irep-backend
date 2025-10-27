@@ -1,10 +1,11 @@
-
 // const authenticate = (req, res, next) => {
 //     req.user = { email: 'user@example.com' }; // Mock user object
 //     next();
 //   };
 
-import { PrismaClient } from "@prisma/client"; // Make sure you have @prisma/client installed
+import prismaPkg from "@prisma/client";
+const { PrismaClient } = prismaPkg;
+// Make sure you have @prisma/client installed
 import vm from "vm";
 const prisma = new PrismaClient();
 import fs from "fs";
