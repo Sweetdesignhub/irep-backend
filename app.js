@@ -25,6 +25,8 @@ app.use(express.urlencoded({ extended: true }));
 const allowedOrigins = [
   "http://localhost:5173", // Allow requests from your local frontend
   "http://awsamjnval001u.jnj.com",
+  "https://lively-pond-0ccb66310.3.azurestaticapps.net"
+
 ];
 
 app.use(
