@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
+    "postinstall": "npx prisma generate",
     "dev": "nodemon src/index.js"
   },
   "author": "Arshdeep Singh",
