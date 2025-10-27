@@ -1,4 +1,0 @@
-
--- Example safe SQL
-ALTER TABLE "SecretKey" ADD COLUMN IF NOT EXISTS "type" TEXT;
-ALTER TABLE "SecretKey" ALTER COLUMN "type" DROP NOT NULL;

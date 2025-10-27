@@ -21,7 +21,7 @@
     "bcrypt": "^5.1.1",
     "cloudinary": "^1.41.3",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.6.1",
     "express": "^4.21.1",
     "groq-sdk": "^0.14.0",
     "ioredis": "^5.4.1",
