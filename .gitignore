@@ -1,0 +1,72 @@
+# Node modules and package lock
+node_modules/
+package-lock.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.*.local
+.secret
+
+# Build and compiled output
+dist/
+build/
+.tmp/
+
+# Dependency directories
+jspm_packages/
+
+# Coverage reports
+coverage/
+
+# Temporary and lock files
+*.pid
+*.seed
+*.pid.lock
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Optional npm or Yarn cache directory
+.npm/
+.yarn/cache/
+.pnpm-debug.log
+
+# Miscellaneous
+*.bak
+*.swp
+*.orig
+*.rej
+
+# Lint and formatting
+.eslintcache
+.prettier.cache
+
+# Ignore test reports
+*.out
+*.tap
+*.xml
+test-results/
+
+# Git-related files
+*.patch
+*.diff
+*.orig
+
+# Avoid uploading your lockfile when you're using pnpm, Yarn, or npm in development teams.
+.pnpmfile.cjs

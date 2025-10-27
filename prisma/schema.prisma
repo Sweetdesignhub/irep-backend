@@ -1,0 +1,171 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Rule {
+  id             Int          @id @default(autoincrement())
+  name           String
+  description    String
+  data           Json
+  flowInput      Json?
+  secret         String
+  status         String       @default("ACTIVE")
+  ruleType       String
+  activationDate DateTime     @default(now())
+  category       String
+  OrganizationId Int
+  organization   Organization @relation("OrganizationRules", fields: [OrganizationId], references: [id])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  versions       Version[]    @relation("RuleVersions") // One-to-many relationship with Version
+
+  // One-to-many relationships with Node and Edge
+  nodes          Node[]       @relation("RuleNodes")
+  edges          Edge[]       @relation("RuleEdges")
+}
+
+model Node {
+  id          String   @id
+  type        String
+  positionX   Float
+  positionY   Float
+  width       Float
+  height      Float
+  data        Json
+  ruleId      Int      // Foreign key to Rule
+  rule        Rule     @relation("RuleNodes", fields: [ruleId], references: [id]) // Add relation name here
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Edge {
+  id          String   @id
+  source      String
+  target      String
+  label       String   @default("next")
+  animated    Boolean
+  targetHandle String?
+  selected    Boolean? 
+  ruleId      Int      // Foreign key to Rule
+  rule        Rule     @relation("RuleEdges", fields: [ruleId], references: [id]) // Add relation name here
+  data         Json?    // <-- Add this line for dynamic properties
+  style       Json?   // for styling
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model EmployeeAppraisal {
+  employee_id   Int     @id @default(autoincrement()) 
+  name          String
+  email         String  @unique // Added email field with a unique constraint
+  department    String
+  job_role      String
+  employeeSalary Decimal @default(0.0)  // Added salary column
+  self_score    Decimal @default(0.0)
+  manager_score String
+  goal_score    Decimal @default(0.0)
+}
+
+
+
+
+model Version {
+  id          Int      @id @default(autoincrement())
+  ruleId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  data        Json
+  flowInput   Json?
+  versionName String   @default("1.0")
+  rule        Rule     @relation("RuleVersions", fields: [ruleId], references: [id])
+}
+
+
+model Teams {
+  id             Int          @id @default(autoincrement())
+  name           String
+  description    String
+  organizationId Int
+  ownerId        Int
+  deletedAt      DateTime?
+  isDeleted      Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  owner          User         @relation("OwnedTeams", fields: [ownerId], references: [id]) // FIXED
+  users          User[]       @relation("TeamUsers") // FIXED
+}
+
+model Organization {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  ownerId     Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  isDeleted   Boolean   @default(false)
+  owner       User      @relation("OwnerOrganizations", fields: [ownerId], references: [id])
+  rules       Rule[]    @relation("OrganizationRules") // FIXED - Added opposite relation
+  teams       Teams[]
+  users       User[]    @relation("UserOrganizations")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  name          String
+  email         String         @unique
+  password      String
+  role          Role           @default(USER)
+  emailVerified Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  ownedOrganizations Organization[] @relation("OwnerOrganizations")
+  ownedTeams    Teams[]        @relation("OwnedTeams") // FIXED - Added opposite relation
+  memberOfTeams Teams[]        @relation("TeamUsers") // FIXED - Added opposite relation
+  organizations Organization[] @relation("UserOrganizations") // FIXED - Added opposite relation
+  secretKeys    SecretKey[]    @relation("UserSecretKeys") 
+}
+
+
+model SecretKey {
+  id        Int      @id @default(autoincrement())
+  key       String
+  value     String
+  type      String   // New field to store the type as a string
+  userId    Int
+  user      User     @relation("UserSecretKeys", fields: [userId], references: [id]) // Foreign key relationship
+}
+
+
+model FlowFile {
+  id      Int    @id @default(autoincrement())
+  ruleId  String @unique
+  name    String
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+model Dataset {
+  id            Int      @id @default(autoincrement())
+  title        String   @unique
+  fileUrl      String   
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  termsAccepted Boolean @default(false)
+}
+
